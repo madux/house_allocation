@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+ 
+    <data>
+       <record id="house_allocation_form_view" model="ir.ui.view">
+            <field name="name">house.allocation</field>
+            <field name="model">house.allocation</field>
+            <field name="arch" type="xml">
+                <form string="Allocation">
+                <header> 
+                    <button name="payment_button_normal" type="object" class="oe_highlight" 
+                        string="Generate Invoice" attrs="{'invisible':[('state','not in',['draft'])]}" 
+                        confirm = "Are you sure you want to confirm" groups="house_allocation.director,base.group_system,house_allocation.officer"/>
+                    <button name="push_allocation" type="object" class="oe_highlight"
+                        string="Confirm" attrs="{'invisible':[('state','not in',['waiting'])]}" 
+                        confirm = "Are you sure you want to confirm Allocation" groups="house_allocation.director,base.group_system,house_allocation.officer"/>
+
+                    
+                    <button name="allocation_confirm" type="object" class="oe_highlight"
+                        string="Allocate" attrs="{'invisible':[('state','not in',['done'])]}" 
+                        confirm = "Are you sure you want to confirm" groups="house_allocation.director,base.group_system,house_allocation.officer"/>
+
+                     <button name="button_cancel" type="object" class="oe_highlight"
+                        string="Cancel" attrs="{'invisible':[('state','in',['Allocated'])]}"
+                        confirm = "Are you sure you want to cancel" groups="house_allocation.director,base.group_system,house_allocation.officer"/>
+                     
+                     <!-- <button name="generate_receipt" type="object" class="oe_highlight"
+                        string="Register Payment" attrs="{'invisible':[('state','not in',['done'])]}" groups="house_allocation.director,base.group_system,house_allocation.officer"/>
+  -->
+                    <button name="button_rejects" type="object" class="oe_highlight" 
+                        string="Reject" attrs="{'invisible':[('state','not in',['Allocated'])]}"
+                        groups="house_allocation.director,base.group_system,house_allocation.officer"/>
+
+                    <field name="state" widget="statusbar" statusbar_visible="draft,Allocated,done"/>
+                </header>
+                <sheet>
+                <div class="oe_button_box" name="button_box">
+                    <button name="see_breakdown_invoice" string = "Invoices to Pay" type="object" class="oe_stat_button" icon="fa-shirtsinbulk" states="draft,Allocated,done">
+                    </button> 
+                    </div> 
+                <div class="oe_title">
+                        <label string="Name "/>
+                        <h1>
+                            <field name="name" readonly="1" required="0" placeholder="Description"/>
+                        </h1>
+                </div>
+                        <div class="oe_button_box" name="button_box"> 
+                                    <!-- <button name="action_get_attachment_view" type="object" class ="oe_highlight"
+                                string="View Attachments" states="approve"/> -->
+                
+                        </div>
+                    <group>
+                        <group> 
+                            <field name="date_order" required="1"/>
+                             <field name="branch_id" string="Project Site" options="{&quot;no_open&quot;: True,'no_quick_create':True,'no_create_edit':True}" />
+                             <field name="partner_id" required="1" string="Customer" options="{&quot;no_open&quot;: True,'no_quick_create':False,'no_create_edit':True}"/>
+                           
+                             <field name="product_id" readonly="0"/>
+                            <field name="list_price" readonly="0"/>
+                             <field name="taxes_id" readonly="0" widget="many2many_tags"/>
+                             
+                        </group>
+                        <group>
+                        <field name="qty" readonly="0"/>
+                        <field name="label" readonly="0"/>
+                        <field name="house_no" readonly="0"/>
+                        <field name="amount_total" readonly="0"/>
+                            <field name="paid_amount" readonly="0"/>
+                             <field name="outstanding" readonly="0"/>
+                            <field name="initial_qty" invisible="1"/>
+                             <field name="remain_qty" invisible="1"/>
+                             <field name="sold_qty" invisible="1"/>
+                              
+                            <!-- <div class="oe_title"> 
+                                <label string="Total Amount"/>
+                                    <h1>
+                                        <field name="paid_amount" readonly="0"/>
+                                    </h1>
+                            </div> -->
+                        </group>
+                            
+                        </group>
+                       <notebook> 
+                            <page name="paymentss" string="Payment Ids">
+                                <field name="payment_ids" readonly ="1">
+                                <p style="color: red;">* See All Payments</p>
+                                <tree string="Payments" editable="bottom">
+                                    <field name="name" style="color: blue;"/>
+                                    <field name="journal_id"/> 
+                                    <field name="amount"/>
+                                    <field name="payment_date"/>
+                                
+                                </tree>
+                                </field>
+                             
+                            </page>
+                            <page string = "Invoices">
+                                <field name="invoice_id" readonly="0" widget="many2many_tags"/>
+                            </page>  
+                      </notebook>
+                    <!-- <field name="description" class = "oe_inline" placeholder="Additional notes... "/> -->
+                 </sheet>
+                </form>
+            </field>
+        </record>
+                     
+
+        <record id="house_allocation_tree_view" model="ir.ui.view">
+            <field name="name">house.allocation.tree</field>
+            <field name="model">house.allocation</field>
+            <field name="arch" type="xml">
+                <tree>
+                         
+                            <field name="partner_id"/>
+                            <field name="date_order" required="1"/>
+                            <field name="branch_id" string="Project Site"/>
+                            <field name="product_id" readonly="0"/>
+                            <field name="list_price" readonly="0"/>  
+                            <field name="label" readonly="0"/>
+                            <field name="qty" readonly="0"/>
+                            <field name="amount_total" readonly="0"/>
+                            <field name="paid_amount" readonly="0"/>
+                             <field name="outstanding" readonly="0"/>
+                              
+                </tree>
+            </field>
+        </record>
+
+        <record id="house_allocation_search_view" model="ir.ui.view">
+           <field name="name">house.allocation.search</field>
+           <field name="model">house.allocation</field>
+           <field name="arch" type="xml">
+               <search string="Allocation">
+                    <field name="name" filter_domain="[('name','ilike',self)]" string="Ref Number"/>
+                    <field name="date_order"/>
+                    <filter string="Done" domain="[('state','=','done')]" help="Done"/>
+                    <filter string="Allocated" domain="[('state','=','Allocated')]" help="Request To Allocate"/>
+                     <field name="amount_total" readonly="0"/>
+                    <field name="branch_id" string="Project Site"/> 
+                    <field name="partner_id" string="Customer"/> 
+
+                    <group expand="0" string="Group By..." colspan="11" col="11">
+                            <filter string="partner_id" name="group_partner"/>
+                            <filter string="Allocated" name="group_allocated" domain="[('state','=','Allocated')]" context="{'group_by':'state'}"/>
+                            <filter string="Sold" name="group_sold" domain="[('state','=','done')]" context="{'group_by':'state'}"/>
+                            <filter string="Project" name="group_branch" context="{'group_by':'branch_id'}"/>
+                             
+                        </group>
+                     
+                </search>
+            </field>
+        </record>
+        <record id="house_allocation_graph" model="ir.ui.view">
+            <field name="name">house.allocation.graph</field>
+            <field name="model">house.allocation</field>
+            <field name="arch" type="xml">
+                <graph string="Allocated Units" type="bar">
+                    
+                    <field name="branch_id" type="col"/>
+                    <field name="product_id" type="col"/>
+                     <field name="qty" operator="+" type="measure"/>
+                        <field name="sold_qty" operator="+" type="measure"/>
+                        <field name="list_price" operator="+" type="measure"/>
+                        <field name="paid_amount"  operator="+" type="measure"/>
+                        <!-- <field name="outstanding"  operator="+" type="measure"/> -->
+
+                </graph>
+            </field>
+        </record>
+
+        <record id="house_allocation_pivot" model="ir.ui.view">
+            <field name="name">house.allocation.pivot</field>
+            <field name="model">house.allocation</field>
+            <field name="arch" type="xml">
+                <pivot string="Allocated Units" display_quantity="false">
+                <field name="product_id" type="row"/>
+                        <field name="partner_id" type="measure"/>
+                      
+                     <field name="qty" type="measure"/> 
+                     <!-- <field name="sold_qty" type="measure"/> -->
+                     <field name="list_price" type="measure"/>
+                     <field name="amount_total" type="measure"/>
+
+                     <field name="paid_amount" type="measure"/>
+                     <!-- <field name="outstanding" type="measure"/> -->
+                     <field name="branch_id" operator="+" type="col"/>
+
+                </pivot>
+            </field>
+        </record>
+
+        <record id="house_allocation_action" model="ir.actions.act_window">
+            <field name="name">House allocation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">house.allocation</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+
+            <field name="search_view_id" eval="False"/> <!-- Force empty -->
+            <field name="view_id" eval="False"/> <!-- Force empty -->
+            <field name="help" type="html">
+              <p class="oe_view_nocontent_create">
+                Click to create.
+              </p>
+            </field>
+        </record>
+ 
+        <record model="ir.ui.view" id="plots_product_formxfvv">
+            <field name="name">House/Plots</field>
+            <field name="model">product.allocation</field>
+            <field name="priority">50</field>
+            <field name="arch" type="xml">
+                <form string="Products">
+                    <label string="House/Plot No: " for="Name" class="oe_edit_only"/>
+                    <h1>
+                       <field name="name" invisible="0" />
+                    </h1> 
+                    <group>
+                        <group> 
+                        <field name="branch_id"/>
+                             <field name="label" invisible="0"/>
+                             <field name="list_price" invisible="0"/>
+                             
+                        </group>
+                        <group>
+                            <field name="taxes_id" readonly="0" widget="many2many_tags"/> 
+
+                            <field name="initial_qty"/> 
+                            <field name="sold_qty" invisible="0" readonly="1"/>
+                             <field name="remain_qty" readonly="1"/> 
+                        </group>
+                    </group>
+
+                 </form>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="plots_product_treexxx">
+            <field name="name">Products</field>
+            <field name="model">product.allocation</field>
+            <field name="priority">50</field>
+            <field name="arch" type="xml">
+                <tree string="Products">
+                    <field name="name"/>
+                    <field name="branch_id"/>
+                             <field name="label" invisible="0"/>
+                            <field name="list_price"/>
+                            <field name="sold_qty" invisible="0"/>
+                             <field name="remain_qty"/> 
+
+
+
+
+                </tree>
+            </field>
+        </record>
+
+
+        <act_window id="productallocation_action"
+        name="Products"
+        res_model="product.allocation"
+        view_mode="tree,form"/>
+
+
+        <menuitem name="Estate Allocation" id="house_allocation_action_menu" sequence="2" action ="house_allocation_action"
+        web_icon="house_allocation,static/description/icon.png"/>
+ 
+         <menuitem name="Allocation" id="allocation_estate_menu" sequence="1" parent ="house_allocation_action_menu" groups="house_allocation.director,base.group_system,house_allocation.officer"/>
+                 <menuitem name="Sales" id="allocation_sales_menu" sequence="1" parent ="allocation_estate_menu" action="house_allocation_action"/>
+        <menuitem name="Configuration" id="config_estate_menu" sequence="2" parent ="house_allocation_action_menu" groups="house_allocation.director,base.group_system,house_allocation.officer"/>
+                 <menuitem name="House/Plot" id="allocation_products_menu" sequence="1" parent ="config_estate_menu" action="productallocation_action"/>
+         
+
+    </data>
+</odoo>

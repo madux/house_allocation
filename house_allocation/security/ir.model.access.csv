@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_id_generic_dla,access_name_generic_dla,generic_erp.model_generic_dla,,1,1,1,1
+access_id_genericdla_line,access_namegeneric_dlaline,generic_erp.model_generic_dla_line,,1,1,1,1
+access_id_generic_imprest,access_name_generic_imprest,generic_erp.model_generic_imprest,,1,1,1,1
+access_id_genericimprest_line,access_namegeneric_imprestline,generic_erp.model_generic_imprest_line,,1,1,1,1
+access_id_generic_store_issuance,access_name_generic_store_issuance,generic_erp.model_generic_store_issuance,,1,1,1,1
+access_id_generic_store_picking,access_name_generic_store_picking,stock.model_stock_picking,,1,1,1,1
+access_id_store_direct_line,access_name_store_direct_line,generic_erp.model_store_direct_line,,1,1,1,1

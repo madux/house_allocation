@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>	
+	
+	
+	<record id="pop_message_wizard" model="ir.ui.view">
+		<field name="name">generic.pop.message</field>
+		<field name="model">generic.pop.message</field>
+		<field name="arch" type="xml">
+			<form string="Message">
+
+				<field name="name"/>
+				<field name="request_id" invisible="1"/>
+				<div class="oe_line">
+				<button name="btn_proceed" type="object" class="oe_highlight"
+                        string="Proceed" groups="generic_erp.group_sm,base.group_system"/> or 
+				<button name="procue_btn_direct" type="object" class="oe_highlight"
+                        string="Procure" groups="generic_erp.group_sm,base.group_system"/>
+ 
+				<!-- <button name="btn_proceed" type="object" string="Proceed" help="You can proceed without the negative products in the order line" class="btn-primary" />
+				<button string="Procure" type="object" name="procue_btn_direct" help="You can also send the negative products to procurement notice" class="btn-primary"/>
+				 -->
+				</div>	
+			
+				<footer>
+					<button string="Cancel" class="btn-primary" special="cancel" />
+				</footer>	
+
+					
+				
+			</form>
+		</field>	
+	</record>
+
+</data>
+</odoo>
+
